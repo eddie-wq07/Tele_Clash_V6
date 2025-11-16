@@ -24,18 +24,20 @@ class CameraHandler:
         
     def start(self):
         """Start camera capture"""
-        self.cap = cv2.VideoCapture(self.camera_index)
-        
+        self.cap = cv2.VideoCapture(self.camera_index, cv2.CAP_DSHOW)  # DirectShow for faster capture on Windows
+
         if not self.cap.isOpened():
             raise Exception(f"Could not open camera {self.camera_index}")
-        
+
         # Set resolution
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
-        
-        # Set FPS (if supported)
+
+        # Performance optimizations
         self.cap.set(cv2.CAP_PROP_FPS, 30)
-        
+        self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)  # Minimize buffer lag
+        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))  # Use MJPEG for faster processing
+
         print(f"Camera started: {self.width}x{self.height}")
         
     def read_frame(self):

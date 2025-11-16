@@ -181,30 +181,25 @@ class HandDetector:
         if len(landmarks) < 21:
             return False
 
-        # Check depth - average z-coordinate of key landmarks
+        # Check depth - use wrist z-coordinate
         # In MediaPipe, smaller z values mean closer to camera
-        # z is relative to wrist depth
         wrist_z = landmarks[self.WRIST]['z']
-        middle_tip_z = landmarks[self.MIDDLE_TIP]['z']
-
-        # Calculate average depth (relative to wrist)
-        avg_depth = abs(wrist_z)
 
         # Filter out hands that are too far from camera
-        if avg_depth > self.max_hand_depth:
+        if abs(wrist_z) > self.max_hand_depth:
             return False
 
-        # Check hand size - calculate distance from wrist to middle finger tip
+        # Check hand size - use squared distance to avoid sqrt (faster)
         wrist = landmarks[self.WRIST]
         middle_tip = landmarks[self.MIDDLE_TIP]
 
-        # Calculate Euclidean distance in normalized coordinates
         dx = middle_tip['x'] - wrist['x']
         dy = middle_tip['y'] - wrist['y']
-        hand_size = np.sqrt(dx**2 + dy**2)
+        hand_size_squared = dx * dx + dy * dy
 
-        # Filter out hands that are too small
-        if hand_size < self.min_hand_size:
+        # Compare squared distances (min_hand_size squared)
+        min_size_squared = self.min_hand_size * self.min_hand_size
+        if hand_size_squared < min_size_squared:
             return False
 
         return True

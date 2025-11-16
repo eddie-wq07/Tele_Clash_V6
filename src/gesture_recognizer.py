@@ -43,41 +43,37 @@ class GestureRecognizer:
         self.stable_threshold = 0.5  # Time needed to be considered stable (seconds)
         self.transition_window = 0.3  # Time window to detect quick transitions (seconds)
 
-    def calculate_distance(self, point1, point2):
+    def calculate_distance_squared(self, point1, point2):
         """
-        Calculate Euclidean distance between two points
-        
+        Calculate squared Euclidean distance between two points (faster, no sqrt)
+
         Args:
             point1: Dict with 'x' and 'y' keys (normalized coords)
             point2: Dict with 'x' and 'y' keys
-            
+
         Returns:
-            float: Distance
+            float: Squared distance
         """
         dx = point1['x'] - point2['x']
         dy = point1['y'] - point2['y']
-        return np.sqrt(dx**2 + dy**2)
+        return dx * dx + dy * dy
     
     def is_finger_extended(self, landmarks, finger_tip_idx, finger_pip_idx):
         """
         Check if a finger is extended based on tip and PIP joint positions
-        
+
         Args:
             landmarks: List of landmark dicts
             finger_tip_idx: Index of finger tip
             finger_pip_idx: Index of PIP joint (knuckle)
         """
-        tip = landmarks[finger_tip_idx]
-        pip = landmarks[finger_pip_idx]
-        
-        return tip['y'] < pip['y'] - 0.02
-    
-    def is_thumb_extended(self, landmarks, finger_tip_idx, finger_pip_idx):
+        # Direct comparison without intermediate variables (faster)
+        return landmarks[finger_tip_idx]['y'] < landmarks[finger_pip_idx]['y'] - 0.02
 
-        tip = landmarks[finger_tip_idx]
-        pip = landmarks[finger_pip_idx]
-        
-        return tip['x'] > pip['x'] - 0.01
+    def is_thumb_extended(self, landmarks, finger_tip_idx, finger_pip_idx):
+        """Check if thumb is extended"""
+        # Direct comparison without intermediate variables (faster)
+        return landmarks[finger_tip_idx]['x'] > landmarks[finger_pip_idx]['x'] - 0.01
     
     
     
@@ -85,50 +81,29 @@ class GestureRecognizer:
     def detect_gesture(self, landmarks):
         """
         Detect if hand is open or closed
-        
+
         Args:
             landmarks: List of landmark dicts from hand detector
-            
+
         Returns:
             str: "open" or "closed"
         """
         if landmarks is None or len(landmarks) < 21:
             return self.previous_gesture
-        
-        # Method 1: Check finger extension
+
+        # Count extended fingers directly (optimized)
         # Indices: thumb=4, index=8, middle=12, ring=16, pinky=20
         # PIP joints: thumb=2, index=6, middle=10, ring=14, pinky=18
-        
-        fingers_extended = []
-        
-        # Check each finger (except thumb - it moves differently)
-        finger_pairs = [
-            (8, 6),   # Index finger
-            (12, 10), # Middle finger
-            (16, 14), # Ring finger
-            (20, 18)  # Pinky finger
-        ]
-        
-        for tip_idx, pip_idx in finger_pairs:
-            fingers_extended.append(self.is_finger_extended(landmarks, tip_idx, pip_idx))
-        
-        fingers_extended.append(self.is_thumb_extended(landmarks, 4, 2))
+        fingers_extended = (
+            self.is_finger_extended(landmarks, 8, 6) +    # Index
+            self.is_finger_extended(landmarks, 12, 10) +  # Middle
+            self.is_finger_extended(landmarks, 16, 14) +  # Ring
+            self.is_finger_extended(landmarks, 20, 18) +  # Pinky
+            self.is_thumb_extended(landmarks, 4, 2)       # Thumb
+        )
 
         # Hand is open if at least 3 fingers are extended
-        total_fingers_extended = sum(fingers_extended)
-        current_time = time.time()
-
-        # Determine if hand is open (3+ fingers)
-        open_gesture = total_fingers_extended >= 3
-        
-        # Combine both methods
-        # Hand is closed if fingers are not extended
-        if not open_gesture:
-            gesture = "closed"
-        else:
-            gesture = "open"
-        
-        return gesture
+        return "open" if fingers_extended >= 3 else "closed"
     
     def get_smoothed_gesture(self, landmarks):
         """

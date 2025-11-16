@@ -59,10 +59,14 @@ class HandMouseApp:
         self.fps = 0
         self.frame_count = 0
         self.fps_start_time = time.time()
-        
+
         # Frame skipping for performance
         self.process_every_n_frames = getattr(Config, 'PROCESS_EVERY_N_FRAMES', 1)
         self.frame_counter = 0
+
+        # UI update optimization - update UI less frequently
+        self.ui_update_counter = 0
+        self.ui_update_every_n_frames = 2  # Update UI text every 2 frames
         
         # Cache last detection results for frame skipping
         self.last_hands_data = []
@@ -90,7 +94,7 @@ class HandMouseApp:
     
     def draw_ui(self, frame, gesture, hand_detected):
         """
-        Draw UI overlay on frame
+        Draw UI overlay on frame (optimized)
 
         Args:
             frame: Camera frame
@@ -99,99 +103,57 @@ class HandMouseApp:
         """
         h, w, _ = frame.shape
 
-        # Draw tracking zone boundaries
+        # Only update text UI every N frames (expensive operation)
+        self.ui_update_counter += 1
+        should_update_text = (self.ui_update_counter % self.ui_update_every_n_frames == 0)
+
+        # Draw tracking zone boundaries (simple lines, always show)
         if Config.SHOW_TRACKING_ZONE:
             zone_x1 = int(w * Config.TRACKING_ZONE_MIN)
             zone_y1 = int(h * Config.TRACKING_ZONE_MIN)
             zone_x2 = int(w * Config.TRACKING_ZONE_MAX)
             zone_y2 = int(h * Config.TRACKING_ZONE_MAX)
 
-            # Draw tracking zone rectangle
+            # Simplified tracking zone (just rectangle, no corner markers)
             cv2.rectangle(frame, (zone_x1, zone_y1), (zone_x2, zone_y2),
-                         (0, 255, 255), 2)  # Yellow border
+                         (0, 255, 255), 1)  # Thinner line for performance
 
-            # Add corner markers for better visibility
-            marker_size = 20
-            color = (0, 255, 255)
-            thickness = 3
-            # Top-left corner
-            cv2.line(frame, (zone_x1, zone_y1), (zone_x1 + marker_size, zone_y1), color, thickness)
-            cv2.line(frame, (zone_x1, zone_y1), (zone_x1, zone_y1 + marker_size), color, thickness)
-            # Top-right corner
-            cv2.line(frame, (zone_x2, zone_y1), (zone_x2 - marker_size, zone_y1), color, thickness)
-            cv2.line(frame, (zone_x2, zone_y1), (zone_x2, zone_y1 + marker_size), color, thickness)
-            # Bottom-left corner
-            cv2.line(frame, (zone_x1, zone_y2), (zone_x1 + marker_size, zone_y2), color, thickness)
-            cv2.line(frame, (zone_x1, zone_y2), (zone_x1, zone_y2 - marker_size), color, thickness)
-            # Bottom-right corner
-            cv2.line(frame, (zone_x2, zone_y2), (zone_x2 - marker_size, zone_y2), color, thickness)
-            cv2.line(frame, (zone_x2, zone_y2), (zone_x2, zone_y2 - marker_size), color, thickness)
+        if should_update_text:
+            # Cache cursor info to avoid multiple calls
+            cursor_info = self.controller.get_cursor_info()
 
-        # Semi-transparent overlay for better text visibility
-        overlay = frame.copy()
-        cv2.rectangle(overlay, (0, 0), (w, 150), (0, 0, 0), -1)
-        cv2.addWeighted(overlay, 0.3, frame, 0.7, 0, frame)
+            # Simplified overlay (smaller area)
+            overlay = frame.copy()
+            cv2.rectangle(overlay, (0, 0), (250, 120), (0, 0, 0), -1)
+            cv2.addWeighted(overlay, 0.3, frame, 0.7, 0, frame)
 
-        y_offset = 30
+            y_offset = 25
 
-        # FPS
-        if Config.SHOW_FPS:
-            fps_color = Config.COLOR_FPS_GOOD
-            if self.fps < 15:
-                fps_color = Config.COLOR_FPS_BAD
-            elif self.fps < 25:
-                fps_color = Config.COLOR_FPS_MEDIUM
+            # FPS (optimized color selection)
+            if Config.SHOW_FPS:
+                fps_color = Config.COLOR_FPS_GOOD if self.fps >= 25 else (Config.COLOR_FPS_MEDIUM if self.fps >= 15 else Config.COLOR_FPS_BAD)
+                cv2.putText(frame, f"FPS: {self.fps:.0f}", (10, y_offset),
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, fps_color, 1)
+                y_offset += 30
 
-            cv2.putText(frame, f"FPS: {self.fps:.1f}", (10, y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, fps_color, 2)
-            y_offset += 35
+            # Hand status (simplified)
+            hand_color = (0, 255, 0) if hand_detected else (0, 0, 255)
+            hand_text = "Hand: OK" if hand_detected else "Hand: --"
+            cv2.putText(frame, hand_text, (10, y_offset),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, hand_color, 1)
+            y_offset += 30
 
-        # Hand detection status
-        if hand_detected:
-            cv2.putText(frame, "Hand: DETECTED", (10, y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-        else:
-            cv2.putText(frame, "Hand: NOT DETECTED", (10, y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        y_offset += 35
+            # Gesture status (optimized)
+            if Config.SHOW_GESTURE_STATUS and gesture:
+                if cursor_info['is_dragging']:
+                    gesture_text, color = "DRAG", (255, 0, 255)
+                elif gesture == "open":
+                    gesture_text, color = "MOVE", Config.COLOR_OPEN_HAND
+                else:
+                    gesture_text, color = "HOLD", Config.COLOR_CLOSED_HAND
 
-        # Get cursor info for drag status
-        cursor_info = self.controller.get_cursor_info()
-
-        # Gesture status
-        if Config.SHOW_GESTURE_STATUS and gesture:
-            if cursor_info['is_dragging']:
-                gesture_text = "DRAGGING"
-                color = (255, 0, 255)  # Magenta for dragging
-            elif gesture == "open":
-                gesture_text = "HOVER"
-                color = Config.COLOR_OPEN_HAND
-            else:
-                gesture_text = "CLOSED"
-                color = Config.COLOR_CLOSED_HAND
-
-            cv2.putText(frame, f"Gesture: {gesture_text}", (10, y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
-            y_offset += 35
-
-        # Cursor position
-        if Config.SHOW_CURSOR_POSITION:
-            cv2.putText(frame,
-                       f"Cursor: ({cursor_info['x']}, {cursor_info['y']})",
-                       (10, y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, Config.COLOR_TEXT, 2)
-
-        # Instructions (bottom of screen)
-        instructions = [
-            "Controls: Open Hand = Move | Close & Hold = Drag | Quick Close = Click",
-            "Press 'Q' to quit | Move mouse to corner for emergency stop"
-        ]
-
-        y_pos = h - 60
-        for instruction in instructions:
-            cv2.putText(frame, instruction, (10, y_pos),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, Config.COLOR_TEXT, 1)
-            y_pos += 25
+                cv2.putText(frame, f"Mode: {gesture_text}", (10, y_offset),
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 1)
     
     def process_frame(self):
         """
