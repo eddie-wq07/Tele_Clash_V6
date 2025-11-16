@@ -1,0 +1,108 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║         HAND TRACKING MOUSE CONTROL - QUICK REFERENCE CARD                ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ QUICK START                                                              │
+└─────────────────────────────────────────────────────────────────────────┘
+1. pip install -r requirements.txt
+2. python test_system.py
+3. python main.py
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ CONTROLS                                                                 │
+└─────────────────────────────────────────────────────────────────────────┘
+Open hand       → Move cursor (hover)
+Closed fist     → Click
+Press 'Q'       → Quit
+Corner move     → Emergency stop
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ FILES TO KNOW                                                            │
+└─────────────────────────────────────────────────────────────────────────┘
+main.py         → Run this to start the application
+config.py       → Edit this to adjust settings
+test_system.py  → Run this to verify setup
+README.md       → Full documentation
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ COMMON TWEAKS (edit config.py)                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+CAMERA_WIDTH = 640          → Lower = faster, higher = better quality
+CURSOR_SMOOTHING_FACTOR = 0.3  → 0.1 = smooth, 0.5 = responsive
+CLICK_COOLDOWN = 0.3        → Seconds between clicks
+GESTURE_SMOOTHING_FRAMES = 5   → Higher = more stable gestures
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PROBLEM SOLVING                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+Camera not found    → Check permissions, try CAMERA_INDEX = 1
+Low FPS            → CAMERA_WIDTH = 480, CAMERA_HEIGHT = 360
+Jittery cursor     → CURSOR_SMOOTHING_FACTOR = 0.2
+No clicks          → Make tighter fist, CLOSED_HAND_THRESHOLD = 0.06
+Too many clicks    → CLICK_COOLDOWN = 0.5
+Hand not detected  → Better lighting, plain background
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ CONFIGURATION PRESETS                                                    │
+└─────────────────────────────────────────────────────────────────────────┘
+ACTIVE_CONFIG = Config                  # Default (balanced)
+ACTIVE_CONFIG = HighPerformanceConfig   # Speed (low res)
+ACTIVE_CONFIG = HighAccuracyConfig      # Quality (high confidence)
+ACTIVE_CONFIG = ResponsiveConfig        # Fast (less smooth)
+ACTIVE_CONFIG = SmoothConfig            # Smooth (more filtering)
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ TEAM ASSIGNMENTS (18-hour sprint)                                       │
+└─────────────────────────────────────────────────────────────────────────┘
+Person 1: Camera + Hand Detection    (camera_handler.py, hand_detector.py)
+Person 2: Gesture Recognition        (gesture_recognizer.py)
+Person 3: Mouse Control              (mouse_controller.py)
+Person 4: Integration + Documentation (main.py, config.py, docs)
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ TESTING INDIVIDUAL MODULES                                              │
+└─────────────────────────────────────────────────────────────────────────┘
+python camera_handler.py      → Test camera
+python hand_detector.py       → Test hand detection
+python gesture_recognizer.py  → Test gestures
+python mouse_controller.py    → Test mouse control
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PERFORMANCE TARGETS                                                      │
+└─────────────────────────────────────────────────────────────────────────┘
+FPS: 25+ frames per second
+Latency: <100ms gesture to action
+Accuracy: >95% gesture recognition
+Stability: No crashes for 5+ minutes
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ USAGE TIPS                                                               │
+└─────────────────────────────────────────────────────────────────────────┘
+✓ Good lighting is essential
+✓ Use plain background
+✓ Keep hand 1-2 feet from camera
+✓ Face palm toward camera
+✓ Make clear, deliberate gestures
+✓ Start with default settings
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ DOCUMENTATION                                                            │
+└─────────────────────────────────────────────────────────────────────────┘
+README.md                   → Complete guide
+QUICK_START.md             → Team sprint guide
+TROUBLESHOOTING.md         → Problem solving
+PROJECT_SUMMARY.txt        → Overview
+hand_tracking_project_plan.md → Detailed plan
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ KEY DEPENDENCIES                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+opencv-python  → Camera capture
+mediapipe      → Hand landmark detection
+pyautogui      → Mouse control
+numpy          → Math operations
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  Need help? Check TROUBLESHOOTING.md or README.md for detailed guidance  ║
+╚═══════════════════════════════════════════════════════════════════════════╝

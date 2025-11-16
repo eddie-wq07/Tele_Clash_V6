@@ -1,0 +1,238 @@
+================================================================================
+HAND TRACKING MOUSE CONTROL - FILE MANIFEST
+================================================================================
+
+All files needed for the project are included below.
+
+PYTHON SOURCE FILES (7 files)
+================================================================================
+
+1. main.py
+   Purpose: Main application entry point
+   Description: Integrates all components and runs the hand tracking system
+   Run with: python main.py
+
+2. camera_handler.py
+   Purpose: Camera capture management
+   Description: Handles webcam initialization, frame capture, and mirroring
+   Test with: python camera_handler.py
+
+3. hand_detector.py
+   Purpose: Hand landmark detection
+   Description: Uses MediaPipe to detect 21 hand landmarks
+   Test with: python hand_detector.py
+
+4. gesture_recognizer.py
+   Purpose: Gesture classification
+   Description: Recognizes open vs closed hand gestures with smoothing
+   Test with: python gesture_recognizer.py
+
+5. mouse_controller.py
+   Purpose: Mouse control
+   Description: Maps hand position to cursor movement and handles clicks
+   Test with: python mouse_controller.py
+
+6. config.py
+   Purpose: Configuration settings
+   Description: Centralized settings for all parameters
+   Edit this: To customize behavior
+
+7. test_system.py
+   Purpose: System verification
+   Description: Tests all dependencies and components
+   Run with: python test_system.py
+
+DOCUMENTATION FILES (6 files)
+================================================================================
+
+8. README.md
+   Purpose: Complete project documentation
+   Contains: Setup, usage, configuration, troubleshooting
+   Start here: For full understanding of the project
+
+9. QUICK_START.md
+   Purpose: 18-hour sprint guide
+   Contains: Team assignments, timeline, workflow
+   Use this: For team collaboration planning
+
+10. TROUBLESHOOTING.md
+    Purpose: Problem-solving guide
+    Contains: Solutions to common issues
+    Check this: When something doesn't work
+
+11. hand_tracking_project_plan.md
+    Purpose: Detailed project plan
+    Contains: Architecture, technical details, timeline
+    Reference: For understanding system design
+
+12. PROJECT_SUMMARY.txt
+    Purpose: Quick overview
+    Contains: High-level summary of everything
+    Read this: For quick understanding
+
+13. QUICK_REFERENCE.txt
+    Purpose: One-page reference card
+    Contains: Most important commands and settings
+    Print this: For quick access during development
+
+14. FILE_MANIFEST.txt (this file)
+    Purpose: Complete file listing
+    Contains: Description of all project files
+
+CONFIGURATION FILES (1 file)
+================================================================================
+
+15. requirements.txt
+    Purpose: Python dependencies
+    Contains: List of required packages
+    Use with: pip install -r requirements.txt
+
+TOTAL FILES: 15
+================================================================================
+
+FILE SIZE SUMMARY
+================================================================================
+Python Source:      ~8KB each, 56KB total
+Documentation:      ~50KB total
+Configuration:      <1KB
+Total Project Size: ~106KB
+
+INSTALLATION ORDER
+================================================================================
+1. Download all 15 files to the same directory
+2. Ensure Python 3.8+ is installed
+3. Run: pip install -r requirements.txt
+4. Run: python test_system.py
+5. If all tests pass, run: python main.py
+
+DEPENDENCIES (installed via requirements.txt)
+================================================================================
+opencv-python==4.8.1.78    (~90MB)
+mediapipe==0.10.8          (~55MB)
+pyautogui==0.9.54          (~50KB)
+numpy==1.24.3              (~20MB)
+
+Total download size: ~165MB
+Total installed size: ~220MB
+
+DIRECTORY STRUCTURE
+================================================================================
+project_folder/
+├── main.py
+├── camera_handler.py
+├── hand_detector.py
+├── gesture_recognizer.py
+├── mouse_controller.py
+├── config.py
+├── test_system.py
+├── requirements.txt
+├── README.md
+├── QUICK_START.md
+├── TROUBLESHOOTING.md
+├── hand_tracking_project_plan.md
+├── PROJECT_SUMMARY.txt
+├── QUICK_REFERENCE.txt
+└── FILE_MANIFEST.txt
+
+MINIMUM SYSTEM REQUIREMENTS
+================================================================================
+Operating System: Windows 10+, macOS 10.14+, or Linux
+Python Version: 3.8 or higher
+RAM: 4GB minimum (8GB recommended)
+Storage: 500MB free space
+Camera: 480p webcam minimum (720p recommended)
+CPU: Dual-core 2.0 GHz (Quad-core 2.5 GHz recommended)
+
+WHAT EACH FILE DOES IN THE WORKFLOW
+================================================================================
+
+DEVELOPMENT WORKFLOW:
+1. Edit config.py → Adjust settings
+2. Run test_system.py → Verify setup
+3. Run main.py → Start application
+4. Test individual modules → Debug specific components
+
+TEAM WORKFLOW:
+1. Read QUICK_START.md → Understand sprint plan
+2. Assign team members → Follow team structure
+3. Develop in parallel → Each person on their module
+4. Integrate frequently → Test together
+5. Polish and document → Final refinements
+
+TROUBLESHOOTING WORKFLOW:
+1. Run test_system.py → Identify issues
+2. Check TROUBLESHOOTING.md → Find solutions
+3. Adjust config.py → Tune parameters
+4. Retest → Verify fixes
+
+FILE DEPENDENCIES
+================================================================================
+main.py depends on:
+  - camera_handler.py
+  - hand_detector.py
+  - gesture_recognizer.py
+  - mouse_controller.py
+  - config.py
+
+Each module is independent except main.py (integration point)
+
+TESTING STRATEGY
+================================================================================
+1. test_system.py → Tests all dependencies and setup
+2. camera_handler.py → Tests camera individually
+3. hand_detector.py → Tests hand detection individually
+4. gesture_recognizer.py → Tests gestures individually
+5. mouse_controller.py → Tests mouse control individually
+6. main.py → Tests full integration
+
+CUSTOMIZATION PRIORITY
+================================================================================
+Most users will only need to edit:
+1. config.py (settings)
+2. requirements.txt (if adding dependencies)
+
+Advanced users might edit:
+3. gesture_recognizer.py (custom gestures)
+4. mouse_controller.py (custom mouse behavior)
+5. main.py (UI changes)
+
+VERSION INFORMATION
+================================================================================
+Project Version: 1.0
+Python Requirement: 3.8+
+OpenCV Version: 4.8.1.78
+MediaPipe Version: 0.10.8
+PyAutoGUI Version: 0.9.54
+NumPy Version: 1.24.3
+
+NOTES
+================================================================================
+- All files must be in the same directory
+- Virtual environment recommended but not required
+- Internet required for initial pip install only
+- Camera permissions must be granted
+- Works offline after installation
+
+CHECKSUM VERIFICATION
+================================================================================
+To verify file integrity, check that:
+- All 15 files are present
+- Total file count matches
+- No .pyc or __pycache__ directories needed
+- All .py files are valid Python syntax
+- requirements.txt has 4 lines
+
+QUICK VERIFICATION COMMANDS
+================================================================================
+# Count files
+ls -1 | wc -l         # Should show 15
+
+# Verify Python files
+python -m py_compile *.py
+
+# Test imports
+python -c "import cv2, mediapipe, pyautogui, numpy; print('OK')"
+
+================================================================================
+END OF FILE MANIFEST
+================================================================================
