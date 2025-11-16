@@ -1,6 +1,6 @@
 """
 Main Application
-Hand Tracking Mouse Control System
+Hand Tracking Mouse Control System with Clash Royale Emote Support
 """
 
 import cv2
@@ -11,6 +11,7 @@ from hand_detector import HandDetector
 from gesture_recognizer import GestureRecognizer
 from mouse_controller import MouseController
 from config import ACTIVE_CONFIG as Config
+from clash_emote_controller import ClashEmoteApp
 
 
 class HandMouseApp:
@@ -334,7 +335,6 @@ class HandMouseApp:
 
 
 def main():
-
     """Main entry point"""
     print("\n" + "="*60)
     print("CLASH ROYALE CONTROLLER - BLUESTACKS EDITION")
@@ -343,23 +343,49 @@ def main():
     print("  1. Open BlueStacks Android Emulator")
     print("  2. Download and launch Clash Royale in BlueStacks")
     print("  3. Configure BlueStacks key mapping:")
-    print("     - 'G' key = Emote 1 aka Crying emote")
-    print("     - 'W' key = Emote 2 aka 6-7 emote")
+    print("     - 'E' key = Open emote menu")
+    print("     - 'G' key = Goblin Crying emote")
+    print("     - 'W' key = Wizard 67 emote")
+    print("     - 'P' key = Princess Yawning emote")
     print("\nHow to Play:")
-    print("  • Open hand = Move cursor")
-    print("  • Close fist & hold = Drag troops onto battlefield")
-    print("  • Quick close = Click/Select")
-    print("  • Two fists near eye-level = Emote 1 (G key)")
-    print("  • Six-seven gesture = Emote 6-7 (W key)")
+    print("  • 1 Hand (MOUSE MODE):")
+    print("    - Open hand = Move cursor")
+    print("    - Close fist & hold = Drag troops onto battlefield")
+    print("    - Quick close = Click/Select")
+    print("  • 2 Hands (EMOTE MODE):")
+    print("    - Two fists near eye-level = Goblin Crying (G)")
+    print("    - Two hands open & spread = Wizard 67 (W)")
+    print("    - One hand near mouth = Princess Yawning (P)")
+    print("\nTraining Mode:")
+    print("  • Press 'T' to toggle training mode")
+    print("  • Press '1/2/3' to select emote to train")
+    print("  • Hold gesture and press SPACE to capture samples")
+    print("  • Press 'S' to save your trained model")
     print("\nPhysical Setup:")
     print("  ✓ Camera has good lighting")
     print("  ✓ Plain background behind you")
     print("  ✓ Sit 1-2 feet from camera")
     print("\nReady to start?")
     print("="*60)
-    
+
     input("Press ENTER to begin...")
-    
+
+    # Use the new ClashEmoteApp with emote detection
+    app = ClashEmoteApp()
+    app.run()
+
+
+def run_basic_mouse_mode():
+    """Run basic mouse control without emote detection"""
+    print("\n" + "="*60)
+    print("BASIC MOUSE CONTROL MODE")
+    print("="*60)
+    print("\nRunning basic hand tracking mouse control...")
+    print("This mode does NOT include emote detection.")
+    print("="*60)
+
+    input("Press ENTER to begin...")
+
     app = HandMouseApp()
     app.run()
 
