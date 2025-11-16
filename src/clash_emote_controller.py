@@ -159,7 +159,9 @@ class ClashEmoteApp:
             max_num_hands=2,
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5,
-            model_complexity=0
+            model_complexity=0,
+            min_hand_size=getattr(Config, 'MIN_HAND_SIZE', 0.15),
+            max_hand_depth=getattr(Config, 'MAX_HAND_DEPTH', 0.1)
         )
 
         # Mouse controller

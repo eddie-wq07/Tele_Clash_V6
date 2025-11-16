@@ -16,6 +16,8 @@ class Config:
     MIN_DETECTION_CONFIDENCE = 0.5  # Lowered for faster processing
     MIN_TRACKING_CONFIDENCE = 0.5
     MODEL_COMPLEXITY = 0  # 0 = Lite (fastest), 1 = Full (slower but more accurate)
+    MIN_HAND_SIZE = 0.15  # Minimum hand size as fraction of frame (filters out small/distant hands)
+    MAX_HAND_DEPTH = 0.1  # Maximum depth/distance from camera (smaller = closer, filters far hands)
     
     # Frame Processing Settings
     PROCESS_EVERY_N_FRAMES = 1  # Process every frame (1 = no skipping)

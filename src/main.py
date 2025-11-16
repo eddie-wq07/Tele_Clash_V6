@@ -34,7 +34,9 @@ class HandMouseApp:
             max_num_hands=Config.MAX_NUM_HANDS,
             min_detection_confidence=Config.MIN_DETECTION_CONFIDENCE,
             min_tracking_confidence=Config.MIN_TRACKING_CONFIDENCE,
-            model_complexity=getattr(Config, 'MODEL_COMPLEXITY', 0)
+            model_complexity=getattr(Config, 'MODEL_COMPLEXITY', 0),
+            min_hand_size=getattr(Config, 'MIN_HAND_SIZE', 0.15),
+            max_hand_depth=getattr(Config, 'MAX_HAND_DEPTH', 0.1)
         )
         
         print("Initializing gesture recognizer...")
