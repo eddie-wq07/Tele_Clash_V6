@@ -10,7 +10,7 @@ from camera_handler import CameraHandler
 from hand_detector import HandDetector
 from gesture_recognizer import GestureRecognizer
 from mouse_controller import MouseController
-from config.config import ACTIVE_CONFIG as Config
+from config import ACTIVE_CONFIG as Config
 
 
 class HandMouseApp:
@@ -334,7 +334,32 @@ class HandMouseApp:
 
 
 def main():
+
     """Main entry point"""
+    print("\n" + "="*60)
+    print("CLASH ROYALE CONTROLLER - BLUESTACKS EDITION")
+    print("="*60)
+    print("\nSetup Instructions:")
+    print("  1. Open BlueStacks Android Emulator")
+    print("  2. Download and launch Clash Royale in BlueStacks")
+    print("  3. Configure BlueStacks key mapping:")
+    print("     - 'G' key = Emote 1 aka Crying emote")
+    print("     - 'W' key = Emote 2 aka 6-7 emote")
+    print("\nHow to Play:")
+    print("  • Open hand = Move cursor")
+    print("  • Close fist & hold = Drag troops onto battlefield")
+    print("  • Quick close = Click/Select")
+    print("  • Two fists near eye-level = Emote 1 (G key)")
+    print("  • Six-seven gesture = Emote 6-7 (W key)")
+    print("\nPhysical Setup:")
+    print("  ✓ Camera has good lighting")
+    print("  ✓ Plain background behind you")
+    print("  ✓ Sit 1-2 feet from camera")
+    print("\nReady to start?")
+    print("="*60)
+    
+    input("Press ENTER to begin...")
+    
     app = HandMouseApp()
     app.run()
 
