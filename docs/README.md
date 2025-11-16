@@ -1,8 +1,7 @@
-# 🎮 Tele-Clash - Play Clash Royale without touching your phone
-
+# 🎮 Tele-Clash - The Future of Clash Royale
 **Control your computer with the power of your hands — no mouse required.**
 
-Tele-Clash is a real-time hand gesture recognition system that transforms your webcam into a powerful accessibility tool. Using computer vision and machine learning, it enables cursor control through natural hand movements, making computing more accessible for individuals with motor disabilities while simultaneously developing hand-eye coordination skills.
+Tele-Clash is a real-time hand gesture recognition system that transforms your webcam into a powerful accessibility tool. Using computer vision and machine learning, it enables cursor control through natural hand movements, making computing more accessible for individuals with motor disabilities while simultaneously developing hand-eye coordination skills. It also promotes engagement by allowing for emotes to be selected without a mouse. By using a CNN-based landmark detection model, we are able to automatically emote on opponents when you absolute demolish them without even touching the screen.
 
 ---
 
@@ -50,6 +49,7 @@ Regular use of Tele-Clash can help develop:
 - **Smooth cursor movement** with configurable filtering
 - **Click debouncing** to prevent accidental inputs
 - **Visual feedback** with on-screen hand landmarks
+- **Automatic Emotes** — Supports emoting with simple calibration
 - **Safety features** including emergency stop (move to corner)
 - **Multiple configuration presets** for different needs
 - **Cross-platform support** — Windows, macOS, Linux
@@ -70,8 +70,9 @@ Regular use of Tele-Clash can help develop:
 
 ```
 ┌─────────────┐     ┌──────────────┐     ┌────────────────┐     ┌─────────────┐
-│   Camera    │ ──▶ │  MediaPipe   │ ──▶ │    Gesture     │ ──▶ │   Mouse     │
+│   Camera    │ ──▶ │  MediaPipe   │ ──▶│    Gesture     │ ──▶│   Mouse     │
 │   Input     │     │  Hand Track  │     │   Recognition  │     │  Control    │
+│             │     |   /Emotes    |     |                |     |             |
 └─────────────┘     └──────────────┘     └────────────────┘     └─────────────┘
       │                    │                      │                     │
    30 FPS            21 landmarks           Open/Closed            Smooth cursor
@@ -113,6 +114,8 @@ python main.py
 | ✊ **Closed Fist** | Click (quick close) or Drag (hold) |
 | **Q Key** | Quit application |
 | **Corner Move** | Emergency stop |
+| **Hands out motion** | Wizard 67 Emote |
+| **Crying motion** | King Crying Emote |
 
 ---
 
